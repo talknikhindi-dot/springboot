@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Talknik Login</title>
+    <style>
+        body { font-family: Arial; background: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 300px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; cursor: pointer; border-radius: 4px; }
+        button:hover { background: #218838; }
+        .toggle { font-size: 12px; color: blue; cursor: pointer; text-align: center; display: block; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 id="title">Talknik Login</h2>
+        <input type="text" id="name" placeholder="Full Name" style="display:none;">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="handleSubmit()" id="btn">Login</button>
+        <span class="toggle" onclick="toggleMode()" id="toggleText">New User? Register here</span>
+    </div>
+
+    <script>
+        let isLogin = true;
+        function toggleMode() {
+            isLogin = !isLogin;
+            document.getElementById('title').innerText = isLogin ? 'Talknik Login' : 'Talknik Register';
+            document.getElementById('name').style.display = isLogin ? 'none' : 'block';
+            document.getElementById('btn').innerText = isLogin ? 'Login' : 'Register';
+            document.getElementById('toggleText').innerText = isLogin ? 'New User? Register here' : 'Already have account? Login';
+        }
+
+        async function handleSubmit() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const endpoint = isLogin ? /login?email=\&password=\ : /register?name=\&email=\&password=\;
+            
+            const response = await fetch(endpoint);
+            const result = await response.text();
+            if(result.includes('Success')) { window.location.href='dashboard.html'; } else { alert(result); }
+        }
+    </script>
+</body>
+</html>

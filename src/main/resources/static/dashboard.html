@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Talknik Admin Pro</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .search-box { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #343a40; color: white; }
+        .del-btn { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Talknik User Management</h2>
+        <input type="text" id="search" class="search-box" placeholder="Search by name or email..." onkeyup="loadUsers()">
+        <table id="userTable">
+            <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Action</th></tr></thead>
+            <tbody></tbody>
+        </table>
+        <br><button onclick="window.location.href='index.html'">Logout</button>
+    </div>
+    <script>
+        async function loadUsers() {
+            const query = document.getElementById('search').value;
+            const res = await fetch('/users?search=' + query);
+            const users = await res.json();
+            const tbody = document.querySelector('#userTable tbody');
+            tbody.innerHTML = '';
+            users.forEach(u => {
+                tbody.innerHTML += \<tr><td>\</td><td>\</td><td>\</td>
+                <td><button class="del-btn" onclick="deleteUser(\)">Delete</button></td></tr>\;
+            });
+        }
+        async function deleteUser(id) {
+            if(confirm('Are you sure?')) {
+                await fetch('/delete?id=' + id);
+                loadUsers();
+            }
+        }
+        loadUsers();
+    </script>
+</body>
+</html>
